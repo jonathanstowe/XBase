@@ -15,7 +15,8 @@ my $lu;
 
 lives-ok { $lu = $obj.last-update }, "get last-update";
 isa-ok($lu, Date, "and it is a Version");
-diag "database last-updated $lu";
+is($obj.records, 92, "got the right number of records");
+diag "$obj";
 
 done;
 # vim: expandtab shiftwidth=4 ft=perl6

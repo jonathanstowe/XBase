@@ -8,6 +8,10 @@ class XBase {
     }
     class Header {
         has Field @.fields;
+        has Int $.version;
+        has Bool $.memo;
+        has Int $.sql;
+        has Bool $.dbt;
 
         has Date $.last-update;
         has Int $.records;
@@ -18,7 +22,18 @@ class XBase {
             ( my Int $ver, my Int $yy, my Int $mm, my Int $dd, $!records, $!head-length ) = $first-chunk.unpack("CCCCLS");
 
             $!last-update = Date.new($yy + 1900, $mm, $dd);
+            $!version = $ver +& 0b00000111;
+            $!memo    = Bool($ver +& 0b00001000);
+            $!sql     = $ver +& 0b01110000;
+            $!dbt     = Bool($ver +& 0b10000000);
         }
+        method Str() {
+            self.gist;
+        }
+        method gist() {
+            "Version {$!version} file { $!dbt ?? 'with' !! 'without' } DBT, {$!records} records. Last updated {$!last-update}";
+        }
+
 
     }
 
@@ -26,7 +41,7 @@ class XBase {
     has IO::Handle $!handle;
     has Str  $.tablename;
 
-    has Header $.header handles <last-update records>;
+    has Header $.header handles <last-update records version>;
 
     multi submethod BUILD(:$!filename!) {
 
@@ -37,6 +52,14 @@ class XBase {
         else {
             die "Can't open { $!filename }";
         }
+    }
+
+    method Str() {
+        $!header.gist();
+    }
+
+    method gist() {
+        self.Str;
     }
 }
 
