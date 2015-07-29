@@ -1,10 +1,27 @@
 use v6;
 
 class XBase {
+    enum DataType ( Character => "C", 
+                    Number    => "N", 
+                    Logical   => "L", 
+                    'Date'      => "D", 
+                    Memo      => "M", 
+                    Float     => "F", 
+                    Binary    => "B",
+                    General   => "G",
+                    Picture   => "P",
+                    Currency  => "Y",
+                    DateTime  => "T",
+                    Integer   => "I",
+                    VariField => "V",
+                    Variant   => "X",
+                    Timestamp => '@',
+                    Double    => 'O',
+                    Autoinc   => '+' );
 
     class FieldDescription {
         has Str $.name;
-        has Str $.type;
+        has DataType $.type;
         has Int $!address;
         has Int $.length;
         has Int $.decimal;
@@ -12,10 +29,10 @@ class XBase {
 
         multi submethod BUILD(Buf :$descriptor!) {
 
-            ($!name, $!type, $!address, $!length, $!decimal, my Int $wa, my Int $sf, my Int $idx ) = $descriptor.unpack("Z11ALCCx2Cx2Cx2C");
+            ($!name, my Str $type, $!address, $!length, $!decimal, my Int $wa, my Int $sf, my Int $idx ) = $descriptor.unpack("Z11ALCCx2Cx2Cx2C");
             $!name ~~ s/\x[0]+$//;
             $!indexed = Bool($idx);
-
+            $!type = DataType($type);
         }
 
     }
