@@ -18,5 +18,7 @@ isa-ok($lu, Date, "and it is a Version");
 is($obj.records, 92, "got the right number of records");
 diag "$obj";
 
+is( $obj.header.fields.elems, 31, "and got the number of fields we expected");
+
 done;
 # vim: expandtab shiftwidth=4 ft=perl6

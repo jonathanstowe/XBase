@@ -2,7 +2,21 @@ use v6;
 
 class XBase {
 
-    class Field {
+    class FieldDescription {
+        has Str $.name;
+        has Str $.type;
+        has Int $!address;
+        has Int $.length;
+        has Int $.decimal;
+        has Bool $.indexed;
+
+        multi submethod BUILD(Buf :$descriptor!) {
+
+            ($!name, $!type, $!address, $!length, $!decimal, my Int $wa, my Int $sf, my Int $idx ) = $descriptor.unpack("Z11ALCCx2Cx2Cx2C");
+            $!name ~~ s/\x[0]+$//;
+            $!indexed = Bool($idx);
+
+        }
 
     }
 
@@ -30,12 +44,13 @@ class XBase {
     }
 
     class Header {
-        has Field @.fields;
+        has FieldDescription @.fields;
 
         has Date $.last-update;
         has Int $.records;
         has Int $!head-length;
         has VersionInfo $.version;
+        has Int $!record-length;
 
         multi submethod BUILD(IO::Handle :$handle!) {
             my Buf $first-chunk = $handle.read(10);
@@ -43,6 +58,21 @@ class XBase {
 
             $!last-update = Date.new($yy + 1900, $mm, $dd);
             $!version = VersionInfo.new(:$ver);
+
+            my Buf $second-chunk = $handle.read(22);
+            ($!record-length, my Int $incomplete, my Int $encrypted, my Int $mdx, my Int $lang) = $second-chunk.unpack("Sx2CCx4x8CCx2");
+
+            repeat {
+                my Buf $descriptor = $handle.read(32);
+                @!fields.push(FieldDescription.new(:$descriptor));
+            } while $handle.tell() < $!head-length - 1;
+
+            my $eoh = $handle.read(1);
+
+            if $eoh[0] != 0x0D {
+                die "Malformed header";
+            }
+
         }
         method Str() {
             self.gist;
