@@ -103,7 +103,7 @@ class XBase {
     has IO::Handle $!handle;
     has Str  $.tablename;
 
-    has Header $.header handles <last-update records version>;
+    has Header $.header handles <last-update records version fields>;
 
     multi submethod BUILD(:$!filename!) {
 

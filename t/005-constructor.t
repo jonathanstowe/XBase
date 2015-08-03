@@ -20,5 +20,10 @@ diag "$obj";
 
 is( $obj.header.fields.elems, 31, "and got the number of fields we expected");
 
+for $obj.fields -> $field {
+    ok($field.name !~~ /\0$/, "field name { $field.name } doesn't have nulls");
+    ok($field.type ~~ XBase::DataType, "and field type is the write type of thing");
+}
+
 done;
 # vim: expandtab shiftwidth=4 ft=perl6
