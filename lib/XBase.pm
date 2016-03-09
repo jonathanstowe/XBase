@@ -1,23 +1,26 @@
-use v6;
+
+use v6.c;
+
+use experimental :pack;
 
 class XBase {
-    enum DataType ( Character => "C", 
-                    Number    => "N", 
-                    Logical   => "L", 
+    enum DataType ( 'Character' => "C", 
+                    'Number'    => "N", 
+                    'Logical'   => "L", 
                     'Date'      => "D", 
-                    Memo      => "M", 
-                    Float     => "F", 
-                    Binary    => "B",
-                    General   => "G",
-                    Picture   => "P",
-                    Currency  => "Y",
-                    DateTime  => "T",
-                    Integer   => "I",
-                    VariField => "V",
-                    Variant   => "X",
-                    Timestamp => '@',
-                    Double    => 'O',
-                    Autoinc   => '+' );
+                    'Memo'      => "M", 
+                    'Float'     => "F", 
+                    'Binary'    => "B",
+                    'General'   => "G",
+                    'Picture'   => "P",
+                    'Currency'  => "Y",
+                    'DateTime'  => "T",
+                    'Integer'   => "I",
+                    'VariField' => "V",
+                    'Variant'   => "X",
+                    'Timestamp' => '@',
+                    'Double'    => 'O',
+                    'Autoinc'   => '+' );
 
     class FieldDescription {
         has Str $.name;

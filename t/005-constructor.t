@@ -1,7 +1,6 @@
 #!perl6
 
 use v6;
-use lib 'lib';
 use Test;
 
 use XBase;
@@ -25,5 +24,5 @@ for $obj.fields -> $field {
     ok($field.type ~~ XBase::DataType, "and field type is the write type of thing");
 }
 
-done;
+done-testing;
 # vim: expandtab shiftwidth=4 ft=perl6
