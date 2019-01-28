@@ -7,7 +7,9 @@ use XBase;
 
 my $obj;
 
-lives-ok { $obj = XBase.new(filename => "t/data/biblio.dbf")  }, "constructor";
+#lives-ok { 
+    $obj = XBase.new(filename => "t/data/biblio.dbf");
+#    }, "constructor";
 isa-ok( $obj, XBase, "and it is the right kind of object");
 
 my $lu;

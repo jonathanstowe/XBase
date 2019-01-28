@@ -1,5 +1,5 @@
 
-use v6.c;
+use v6;
 
 use experimental :pack;
 
@@ -7,7 +7,7 @@ class XBase {
     enum DataType ( 'Character' => "C", 
                     'Number'    => "N", 
                     'Logical'   => "L", 
-                    'Date'      => "D", 
+                    'DateStamp'      => "D", 
                     'Memo'      => "M", 
                     'Float'     => "F", 
                     'Binary'    => "B",
@@ -66,7 +66,7 @@ class XBase {
     class Header {
         has FieldDescription @.fields;
 
-        has Date $.last-update;
+        has Dateish $.last-update;
         has Int $.records;
         has Int $!head-length;
         has VersionInfo $.version;
